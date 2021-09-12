@@ -8,8 +8,14 @@ class Transaction_record(models.Model):
         ('BNB', 'BNB')
     ]
 
+    TYPE_BUY_SELL = [
+        ('buy', 'buy'),
+        ('sell', 'sell')
+    ]
+
+    # id = models.BigAutoField(primary_key=True)
     date = models.DateField(blank=False)
-    # buy_or_sell = models.
+    buy_or_sell = models.CharField(blank=False, max_length=5, choices=TYPE_BUY_SELL)
     type = models.CharField(max_length=10, choices=TYPE_OF_COINS)
     fee = models.FloatField(max_length=5)
     price = models.FloatField(max_length=10)

@@ -11318,3 +11318,8 @@ body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
 .btn-group, .form-submit {
   margin-top: 10px;
 }
+
+.btn-success.disabled, .btn-danger.disabled {
+    opacity: 1 !important;
+}
+
