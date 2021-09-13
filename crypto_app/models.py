@@ -5,7 +5,13 @@ class Transaction_record(models.Model):
     TYPE_OF_COINS = [
         ('BTC', 'BTC'),
         ('ETH', 'ETH'),
-        ('BNB', 'BNB')
+        ('BNB', 'BNB'),
+        ('VET', 'VET'),
+        ('ADA', 'ADA'),
+        ('LINK', 'LINK'),
+        ('DOGE', 'DOGE'),
+        ('FIL', 'FIL'),
+        ('DOT', 'DOT')
     ]
 
     TYPE_BUY_SELL = [

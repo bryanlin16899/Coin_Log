@@ -1,3 +1,4 @@
+import requests
 from django.shortcuts import render, redirect
 from .models import Transaction_record
 
