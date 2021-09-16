@@ -23,8 +23,9 @@
                 <div class="sidebar-heading border-bottom bg-light">Coin log</div>
                 <div class="list-group list-group-flush">
                     <div class="container sidebar-container">
+                        <button class="btn btn-primary w-100 add__record_btn">Add record</button>
                         <div class="container form-container">
-                          <form class="row" method="POST">
+                          <form class="row form hidden" method="POST">
                             {% csrf_token %}
                             <div class="col-sm-12">
                               <label for="inputDateTime" class="form-label">Date of transaction</label>
@@ -49,7 +50,7 @@
                             </div>
                             <div class="col-sm-6">
                               <label for="inputTransactionFee" class="form-label">Fee (%)</label>
-                              <input type="number" step="any" class="form-control" id="inputTransactionFee" name="tran_fee">
+                              <input type="number" step="any" class="form-control tran_fee" id="inputTransactionFee" name="tran_fee">
                             </div>
                             <div class="col-sm-6">
                               <label for="inputPrice" class="form-label">Price</label>
@@ -71,6 +72,20 @@
                             </div>
                           </form>
                         </div>
+                        <hr>
+                        <div class="container coin-info-container">
+                            <table class="table table-striped">
+                                <tbody>
+                                    {% for coin in rqst %}
+                                    <tr>
+                                        <td style="font-size: 13px"> <img src="{{coin.image}}" width="23"> {{ coin.symbol|upper }}</td>
+                                        <td style="font-size: 13px">{{ coin.current_price }}</td>
+                                        <td style="font-size: 2px" class="day_change">{{coin.price_change_percentage_24h|floatformat:2}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 <!--                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Dashboard</a>-->
 <!--                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Shortcuts</a>-->
@@ -85,7 +100,7 @@
                 <!-- Top navigation-->
                 <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
                     <div class="container-fluid">
-                        <button class="btn btn-primary" id="sidebarToggle">Toggle Menu</button>
+                        <button class="btn btn-outline-primary" id="sidebarToggle"><i class="bi bi-chevron-double-left"></i></button>
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
