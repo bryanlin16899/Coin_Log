@@ -23,52 +23,56 @@
                 <div class="sidebar-heading border-bottom bg-light">Coin log</div>
                 <div class="list-group list-group-flush">
                     <div class="container sidebar-container">
-                        <button class="btn btn-primary w-100 add__record_btn">Add record</button>
+                        <button class="btn btn-primary w-100 add__record_btn">Search trade</button>
                         <div class="container form-container">
                           <form class="row form hidden" method="POST">
                             {% csrf_token %}
                             <div class="col-sm-12">
-                              <label for="inputDateTime" class="form-label">Date of transaction</label>
-                              <div class='input-group date' id='datetimepicker1'>
-                                  <input type="date" id="inputDateTime" name="inputDateTime" class="form-control datepicker" value="02-16-2012">
-                              </div>
+                                  <label for="inputTicker" class="form-label">Ticker</label>
+                                  <input type="text" class="form-control" id="inputTicker" name="inputTicker" placeholder="BTCUSDT">
                             </div>
-                            <div class="col-sm-6">
-                              <label for="inputState" class="form-label">Coin</label>
-                              <select id="inputState" class="form-select" name="coin_type">
-                                <option selected>Choose...</option>
-                                <option>BTC</option>
-                                <option>ETH</option>
-                                <option>BNB</option>
-                                <option>VET</option>
-                                <option>ADA</option>
-                                <option>LINK</option>
-                                <option>DOGE</option>
-                                <option>FIL</option>
-                                <option>DOT</option>
-                              </select>
-                            </div>
-                            <div class="col-sm-6">
-                              <label for="inputTransactionFee" class="form-label">Fee (%)</label>
-                              <input type="number" step="any" class="form-control tran_fee" id="inputTransactionFee" name="tran_fee">
-                            </div>
-                            <div class="col-sm-6">
-                              <label for="inputPrice" class="form-label">Price</label>
-                              <input type="number" step="any" class="form-control" id="inputPrice" name="price">
-                            </div>
-                            <div class="col-sm-6">
-                              <label for="inputAmount" class="form-label">Amount</label>
-                              <input type="number" step="any" class="form-control" id="inputAmount" name="amount">
-                            </div>
-                            <div class="btn-group col-sm-12" role="group" aria-label="Basic radio toggle button group">
-                              <input type="radio" class="btn-check" name="btnradio" id="btnradio1" value="buy" autocomplete="off" checked>
-                              <label class="btn btn-outline-success" for="btnradio1">Buy</label>
+<!--                            <div class="col-sm-12">-->
+<!--                              <label for="inputDateTime" class="form-label">Date of transaction</label>-->
+<!--                              <div class='input-group date' id='datetimepicker1'>-->
+<!--                                  <input type="date" id="inputDateTime" name="inputDateTime" class="form-control datepicker" value="02-16-2012">-->
+<!--                              </div>-->
+<!--                            </div>-->
+<!--                            <div class="col-sm-6">-->
+<!--                              <label for="inputState" class="form-label">Coin</label>-->
+<!--                              <select id="inputState" class="form-select" name="coin_type">-->
+<!--                                <option selected>Choose...</option>-->
+<!--                                <option>BTC</option>-->
+<!--                                <option>ETH</option>-->
+<!--                                <option>BNB</option>-->
+<!--                                <option>VET</option>-->
+<!--                                <option>ADA</option>-->
+<!--                                <option>LINK</option>-->
+<!--                                <option>DOGE</option>-->
+<!--                                <option>FIL</option>-->
+<!--                                <option>DOT</option>-->
+<!--                              </select>-->
+<!--                            </div>-->
+<!--                            <div class="col-sm-6">-->
+<!--                              <label for="inputTransactionFee" class="form-label">Fee (%)</label>-->
+<!--                              <input type="number" step="any" class="form-control tran_fee" id="inputTransactionFee" name="tran_fee">-->
+<!--                            </div>-->
+<!--                            <div class="col-sm-6">-->
+<!--                              <label for="inputPrice" class="form-label">Price</label>-->
+<!--                              <input type="number" step="any" class="form-control" id="inputPrice" name="price">-->
+<!--                            </div>-->
+<!--                            <div class="col-sm-6">-->
+<!--                              <label for="inputAmount" class="form-label">Amount</label>-->
+<!--                              <input type="number" step="any" class="form-control" id="inputAmount" name="amount">-->
+<!--                            </div>-->
+<!--                            <div class="btn-group col-sm-12" role="group" aria-label="Basic radio toggle button group">-->
+<!--                              <input type="radio" class="btn-check" name="btnradio" id="btnradio1" value="buy" autocomplete="off" checked>-->
+<!--                              <label class="btn btn-outline-success" for="btnradio1">Buy</label>-->
 
-                              <input type="radio" class="btn-check" name="btnradio" id="btnradio2" value="sell" autocomplete="off">
-                              <label class="btn btn-outline-danger" for="btnradio2">Sell</label>
-                            </div>
+<!--                              <input type="radio" class="btn-check" name="btnradio" id="btnradio2" value="sell" autocomplete="off">-->
+<!--                              <label class="btn btn-outline-danger" for="btnradio2">Sell</label>-->
+<!--                            </div>-->
                             <div class="col-12 form-submit">
-                              <button type="submit" class="btn btn-primary w-100">Save</button>
+                              <button type="submit" class="btn btn-primary w-100">Search</button>
                             </div>
                           </form>
                         </div>
@@ -121,6 +125,24 @@
                 </nav>
                 <!-- Page content-->
                 <div class="container-fluid">
+                    <section class="overview">
+                        <div class="container">
+                            <table class="table table-striped">
+                                <thead>
+                                  <tr>
+                                      <th>Your costs</th>
+                                      <th>Coin amount</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                      <td>{{ this_coin.totle_costs|floatformat:4 }}</td>
+                                      <td>{{ this_coin.totle_amount|floatformat:6 }}</td>
+                                  </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
                     <section class="records">
                         <div class="container">
                           <table class="table table-striped">
@@ -132,23 +154,23 @@
                                 <th scope="col">Coin</th>
                                 <th scope="col">Price</th>
                                 <th scope="col">Amount</th>
-                                <th scope="col"></th>
+                                <th scope="col">Cost</th>
                               </tr>
                             </thead>
                             <tbody>
-                            {% for item in records%}
+                            {% for item in this_coin.new_trade%}
                               <tr>
                                 <th scope="row">{{ forloop.counter }}</th>
-                                <td class="col-md-2">{{ item.date }}</td>
-                                {% if item.buy_or_sell == 'buy' %}
+                                <td class="col-md-2">{{ item.time }}</td>
+                                {% if item.isBuyer %}
                                   <td><button type="button" class="btn btn-success btn-sm disabled">Buy</button></td>
                                 {% else %}
                                   <td><button type="button" class="btn btn-danger btn-sm disabled">Sell</button></td>
                                 {% endif %}
-                                <td>{{ item.type }}</td>
-                                <td>{{ item.price }}</td>
-                                <td>{{ item.amount }}</td>
-                                <td><a href="{% url 'delete_record' item.id %}" type="button" class="btn btn-outline-secondary btn-sm"><i class="bi bi-x-lg"></i></a></td>
+                                <td>{{ item.symbol }}</td>
+                                <td>{{ item.price|floatformat:3 }}</td>
+                                <td>{{ item.qty }}</td>
+                                <td>{{ item.quoteQty|floatformat:3 }}</td>
                               </tr>
                             {% endfor %}
                             </tbody>

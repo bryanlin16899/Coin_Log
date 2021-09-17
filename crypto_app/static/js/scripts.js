@@ -47,8 +47,10 @@ addRecord.addEventListener('click', function(){
 priceChange24h.forEach( num => {
 if (Number(num.textContent) > 0){
     num.style.color = 'green';
+    num.textContent = `▲${num.textContent}`
 } else {
     num.style.color = 'red';
+    num.textContent = `▼${num.textContent}`
 }
 })
 

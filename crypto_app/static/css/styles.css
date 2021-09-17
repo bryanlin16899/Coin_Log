@@ -11333,7 +11333,7 @@ body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
 
 .form {
   border-radius: 5px;
-  height: 300px;
+  height: 120px;
   transition: all 0.5s, transform 2ms;
 }
 
