@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Transaction_record
+from .models import Website_users
 
 # Register your models here.
-admin.site.register(Transaction_record)
+admin.site.register(Website_users)

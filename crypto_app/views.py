@@ -1,26 +1,27 @@
 import requests
+from .models import Website_users
 from datetime import datetime
 from binance import Client
+from binance.exceptions import BinanceAPIException
+from django.db import IntegrityError
 from django.shortcuts import render, redirect
-from .models import Transaction_record
+from django.contrib.auth.models import User
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
 
 COIN_GECKO_URL = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false'
-
-API_KEY = 'ocCRSUEHwRCI7Xl65jOx7YhvjkEXzDYOAy8tJtAFpJSfT8L0yZOW5FBOasWpT3jO'
-SECRET_KEY = '16VD0aM5x8z5iG6xpjNVdKWIQrnvIn50fXGqNdGDYgseRfUcHM4XsIFSg21LPtmY'
+RQST_FROM_GECKO = requests.get(url=COIN_GECKO_URL).json()[:30]
 
 
-client = Client(API_KEY, SECRET_KEY)
-my_trades = client.get_my_trades(symbol='BTCUSDT')
-for item in my_trades:
-    new_date = datetime.fromtimestamp((item['time'])/1000)
-    item['time'] = str(new_date).split(' ')[0]
-
-def get_trades_info(symbol='BTCUSDT'):
+def get_trades_info(symbol='BTCUSDT', api_key=None, secret_key=None):
+    client = Client(api_key, secret_key)
     this_coin = {
         'new_trade': {},
+        'profit': 0,
         'totle_costs': 0,
-        'totle_amount': 0
+        'totle_amount': 0,
+        'realized_profit': 0,
+        'unrealized_profit': 0,
     }
     ALL_TICKERS = ['ETHBTC', 'LTCBTC', 'BNBBTC', 'NEOBTC', 'QTUMETH', 'EOSETH', 'SNTETH', 'BNTETH', 'BCCBTC', 'GASBTC',
                    'BNBETH', 'BTCUSDT', 'ETHUSDT', 'HSRBTC', 'OAXETH', 'DNTETH', 'MCOETH', 'ICNETH', 'MCOBTC', 'WTCBTC',
@@ -209,23 +210,103 @@ def get_trades_info(symbol='BTCUSDT'):
                    'ELFBUSD', 'POLYUSDT', 'IDEXUSDT', 'VIDTUSDT', 'SOLBIDR', 'AXSBIDR', 'BTCUSDP', 'ETHUSDP', 'BNBUSDP',
                    'USDPBUSD', 'USDPUSDT', 'GALAUSDT', 'GALABUSD', 'GALABNB', 'GALABTC']
     if symbol in ALL_TICKERS:
+        recent_price = float(client.get_recent_trades(symbol=symbol)[0]['price'])
         this_coin['new_trade'] = client.get_my_trades(symbol=symbol)
-        for cost in this_coin['new_trade']:
-            if cost['isBuyer']:
-                this_coin['totle_costs'] += float(cost['quoteQty'])
-                this_coin['totle_amount'] += float(cost['qty'])
+        # Calc totole_costs and totle_amount
+        for trade in this_coin['new_trade']:
+            if trade['isBuyer']:
+                this_coin['totle_costs'] += float(trade['quoteQty'])
+                this_coin['totle_amount'] += float(trade['qty'])
             else:
-                this_coin['totle_costs'] -= float(cost['quoteQty'])
-                this_coin['totle_amount'] -= float(cost['qty'])
+                this_coin['realized_profit'] += float(trade['quoteQty'])
+                this_coin['totle_amount'] -= float(trade['qty'])
+        # Convert timestamp to datatime
+        for timestamp in this_coin['new_trade']:
+            new_date = datetime.fromtimestamp((timestamp['time']) / 1000)
+            timestamp['time'] = str(new_date).split(' ')[0]
+        this_coin['unrealized_profit'] = recent_price * this_coin['totle_amount']
+        this_coin['profit'] = this_coin['realized_profit'] + this_coin['unrealized_profit'] - this_coin['totle_costs']
         return this_coin
     else:
-        return 'error'
+        return False
+
 
 def home(request):
-    rqst = requests.get(url=COIN_GECKO_URL).json()[:30]
+    return render(request, 'index.html', {'RQST_FROM_GECKO': RQST_FROM_GECKO})
+
+
+def signupuser(request):
     if request.method == 'GET':
-        return render(request, 'index.html', {'rqst': rqst, 'this_coin': get_trades_info()})
-    elif request.method == 'POST':
-        return render(request, 'index.html', {'rqst': rqst, 'this_coin': get_trades_info(request.POST.get('inputTicker'))})
+        return render(request, 'signup.html', {'RQST_FROM_GECKO': RQST_FROM_GECKO})
     else:
-        return render(request, 'index.html', {'rqst': rqst, 'this_coin': get_trades_info()})
+        if request.POST['password1'] == request.POST['password2']:
+            try:
+                user = User.objects.create_user(request.POST['username'], password=request.POST['password1'])
+                user.save()
+                user_id = User.objects.get(username=request.POST['username']).id
+                api_info = Website_users(user_id=user_id, api_key=request.POST['api_key'], secret_key=request.POST['secret_key'])
+                api_info.save()
+                login(request, user)
+                return redirect('dashboard')
+            except IntegrityError:
+                return render(request, 'signup.html', {'RQST_FROM_GECKO': RQST_FROM_GECKO, 'error': 'That username has already been taken \n try another one.'})
+        else:
+            return render(request, 'signup.html', {'RQST_FROM_GECKO': RQST_FROM_GECKO, 'error': 'Password did not match.'})
+
+
+def loginuser(request):
+    if request.method == 'GET':
+        return render(request, 'login.html', {'RQST_FROM_GECKO': RQST_FROM_GECKO})
+    else:
+        user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
+        if user is None:
+            return render(request, 'login.html', {'RQST_FROM_GECKO': RQST_FROM_GECKO, 'error': 'Username and password did not match.'})
+        else:
+            login(request, user)
+            return redirect('dashboard')
+
+
+def logoutuser(request):
+    if request.method == 'POST':
+        logout(request)
+        return redirect('home')
+
+
+@login_required
+def dashboard(request):
+    try:
+        user_key_info = Website_users.objects.get(user=request.user)
+        api_key = user_key_info.api_key
+        secret_key = user_key_info.secret_key
+        if request.method == 'GET':
+            return render(request, 'dashboard.html',
+                          {
+                           'RQST_FROM_GECKO': RQST_FROM_GECKO,
+                           'this_coin': get_trades_info(api_key=api_key, secret_key=secret_key)
+                          })
+        elif request.method == 'POST':
+            new_symbol = request.POST.get('inputTicker')
+            if get_trades_info(symbol=new_symbol, api_key=api_key, secret_key=secret_key):
+                return render(request, 'dashboard.html',
+                              {
+                               'RQST_FROM_GECKO': RQST_FROM_GECKO,
+                               'this_coin': get_trades_info(symbol=new_symbol, api_key=api_key, secret_key=secret_key)
+                              })
+            else:
+                return render(request, 'dashboard.html',
+                              {
+                               'RQST_FROM_GECKO': RQST_FROM_GECKO,
+                               'error': 'Invalid Ticker'
+                              })
+        else:
+            return render(request, 'dashboard.html',
+                          {
+                           'RQST_FROM_GECKO': RQST_FROM_GECKO,
+                           'this_coin': get_trades_info(api_key=api_key, secret_key=secret_key)
+                          })
+    except BinanceAPIException:
+        return render(request, 'dashboard.html',
+                      {
+                          'RQST_FROM_GECKO': RQST_FROM_GECKO,
+                          'error': 'Your API KEY or SECRET KEY did not correct.'
+                      })

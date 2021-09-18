@@ -6,42 +6,54 @@
 // 
 // Scripts
 //
-const addRecord = document.querySelector('.add__record_btn')
+const searchTrade = document.querySelector('.search_trade__btn')
 //const submitRecord = document.querySelector('.')
 const form = document.querySelector('.form')
 const priceChange24h = document.querySelectorAll('.day_change')
+const coinProfit = document.querySelector('.coin_profit')
 
 window.addEventListener('DOMContentLoaded', event => {
 
-    // Toggle the side navigation
-    const sidebarToggle = document.body.querySelector('#sidebarToggle');
-    if (sidebarToggle) {
-//         Uncomment Below to persist sidebar toggle between refreshes
-         if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
-             document.body.classList.toggle('sb-sidenav-toggled');
-         }
-        sidebarToggle.addEventListener('click', event => {
-            event.preventDefault();
-            document.body.classList.toggle('sb-sidenav-toggled');
-            localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
-        });
-    }
+//    // Toggle the side navigation
+//    const sidebarToggle = document.body.querySelector('#sidebarToggle');
+//    if (sidebarToggle) {
+////         Uncomment Below to persist sidebar toggle between refreshes
+//         if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
+//             document.body.classList.toggle('sb-sidenav-toggled');
+//         }
+//        sidebarToggle.addEventListener('click', event => {
+//            event.preventDefault();
+//            document.body.classList.toggle('sb-sidenav-toggled');
+//            localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+//        });
+//    }
 
-    if (addRecord) {
+    if (searchTrade) {
         if (localStorage.getItem('form_hidden') === 'false') {
             form.classList.remove('hidden');
         }
     }
 
+    if (Number(coinProfit.textContent) > 0){
+        coinProfit.style.color = 'green';
+        coinProfit.textContent = `▲${coinProfit.textContent}`
+    } else if (Number(coinProfit.textContent) < 0) {
+        coinProfit.style.color = 'red';
+        coinProfit.textContent = `▼${coinProfit.textContent}`
+    } else {
+        coinProfit.textContent = `0`
+    }
 });
 
 window.setTimeout(function () {
-    window.location.reload();
+    if (window.location.pathname === '/'){
+        window.location.reload();
+    }
 }, 30000);
 
-addRecord.addEventListener('click', function(){
+searchTrade.addEventListener('click', function(){
     form.classList.toggle('hidden');
-    localStorage.setItem('form_hidden', form.classList.contains('hidden'));
+    localStorage.setItem('form_hidden', true);
 })
 
 priceChange24h.forEach( num => {
