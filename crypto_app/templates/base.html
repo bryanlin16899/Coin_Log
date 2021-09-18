@@ -22,7 +22,7 @@
     <div class="d-flex" id="wrapper">
         <!-- Sidebar-->
         <div class="border-end bg-white" id="sidebar-wrapper">
-            <div class="sidebar-heading border-bottom bg-light"><a href="{% url 'home' %}"><h3>Coin log</h3></a></div>
+            <div class="sidebar-heading border-bottom bg-light"><a href="{% url 'home' %}"><h3>Coinlog</h3></a></div>
             <div class="list-group list-group-flush">
                 <div class="container sidebar-container">
                     <button class="btn btn-primary w-100 search_trade__btn">Search trade</button>
@@ -74,6 +74,7 @@
                                 {% if user.is_authenticated %}
                                 <li class="nav-item"><a class="nav-link">Logged in as {{ user.username }}</a></li>
                                 <li class="nav-item"><a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{% url 'change_api_key' %}">Setting</a></li>
                                 <form id="form_logout" action="{% url 'logoutuser' %}" method="POST">
                                     {% csrf_token %}
                                     <li class="nav-item"><a href="#" class="nav-link" onclick="document.getElementById('form_logout').submit();">Logout</a></li>

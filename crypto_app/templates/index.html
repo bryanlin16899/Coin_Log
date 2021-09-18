@@ -2,63 +2,16 @@
 
 {% block content %}
     <!-- Page content-->
-    <section class="overview">
+    <section class="introduction">
         <div class="container">
-            <table class="table table-striped">
-                <thead>
-                  <tr>
-                      <th>Costs</th>
-                      <th>Coin amount</th>
-                      <th>Realized profit</th>
-                      <th>Unrealized profit</th>
-                      <th>Totle profit</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                      <td>{{ this_coin.totle_costs|floatformat:4 }}<p style="color:red; margin:0px;">{{ error }}</p></td>
-                      <td>{{ this_coin.totle_amount|floatformat:6 }}</td>
-                      <td>{{ this_coin.realized_profit|floatformat:4 }}</td>
-                      <td>{{ this_coin.unrealized_profit|floatformat:4 }}</td>
-                      <td class="coin_profit">{{ this_coin.profit|floatformat:2 }}</td>
-                  </tr>
-                </tbody>
-            </table>
-        </div>
-    </section>
-    <section class="records">
-        <div class="container">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Date</th>
-                <th scope="col"></th>
-                <th scope="col">Coin</th>
-                <th scope="col">Price</th>
-                <th scope="col">Amount</th>
-                <th scope="col">Cost</th>
-              </tr>
-            </thead>
-            <tbody>
-            {% for item in this_coin.new_trade%}
-              <tr>
-                <th scope="row">{{ forloop.counter }}</th>
-                <td class="col-md-2">{{ item.time }}</td>
-                {% if item.isBuyer %}
-                  <td><button type="button" class="btn btn-success btn-sm disabled">Buy</button></td>
-                {% else %}
-                  <td><button type="button" class="btn btn-danger btn-sm disabled">Sell</button></td>
-                {% endif %}
-                <td>{{ item.symbol }}</td>
-                <td>{{ item.price|floatformat:3 }}</td>
-                <td>{{ item.qty }}</td>
-                <td>{{ item.quoteQty|floatformat:3 }}</td>
-              </tr>
-            {% endfor %}
-            </tbody>
-          </table>
+            <h1>Hi there! Welcome to Coinlog</h1>
+            <hr>
+            <p>We can help you to realize your trade on Binance, Just create an account and link your Binance API!</p>
+            <p>You can search Binance trade ticker whatever you like, Then you will see your all trade history,totle cost,profit...etc on your personal dashboard!</p>
+            <p></p>
         </div>
       </section>
 {% endblock %}
+
+<!--Design from Bryan lin: https://github.com/bryanlin16899 -->
 

@@ -252,7 +252,7 @@ def signupuser(request):
                 return render(request, 'signup.html', {'RQST_FROM_GECKO': RQST_FROM_GECKO, 'error': 'That username has already been taken \n try another one.'})
         else:
             return render(request, 'signup.html', {'RQST_FROM_GECKO': RQST_FROM_GECKO, 'error': 'Password did not match.'})
-
+    # Design from Bryan lin: https://github.com/bryanlin16899
 
 def loginuser(request):
     if request.method == 'GET':
@@ -310,3 +310,17 @@ def dashboard(request):
                           'RQST_FROM_GECKO': RQST_FROM_GECKO,
                           'error': 'Your API KEY or SECRET KEY did not correct.'
                       })
+
+
+@login_required
+def change_api_key(request):
+    user_key_info = Website_users.objects.get(user=request.user)
+    api_key = user_key_info.api_key
+    secret_key = user_key_info.secret_key
+    if request.method == 'GET':
+        return render(request, 'change_user_api_key.html', {'RQST_FROM_GECKO': RQST_FROM_GECKO, 'api_key': api_key, 'secret_key': secret_key})
+    else:
+        user_key_info.api_key = request.POST['api_key']
+        user_key_info.secret_key = request.POST['secret_key']
+        user_key_info.save()
+        return redirect('dashboard')

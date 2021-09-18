@@ -25,4 +25,6 @@ urlpatterns = [
     path('signup', views.signupuser, name='signupuser'),
     path('login', views.loginuser, name='loginuser'),
     path('logout', views.logoutuser, name='logoutuser'),
+    # Change user api key
+    path('change_api_key', views.change_api_key, name='change_api_key')
 ]

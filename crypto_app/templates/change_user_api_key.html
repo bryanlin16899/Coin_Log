@@ -7,26 +7,23 @@
         <div class="col-12 col-md-9 col-lg-7 col-xl-6">
           <div class="card" style="border-radius: 15px;">
             <div class="card-body p-5">
-              <h2 class="text-uppercase text-center mb-5">Log in</h2>
-              <h3 class="text-center mb-5" style="color:red; margin:0px;">{{ error }}</h3>
+              <h2 class="text-uppercase text-center mb-5">Change API information</h2>
               <form method="POST">
                 {% csrf_token %}
                 <div class="form-outline mb-4">
-                  <input type="text" id="username" name="username" class="form-control form-control-lg" />
-                  <label class="form-label" for="username">Username</label>
+                  <input type="text" id="api_key" name="api_key" class="form-control form-control-lg" value="{{ api_key }}" />
+                  <label class="form-label" for="api_key">API Key</label>
                 </div>
 
                 <div class="form-outline mb-4">
-                  <input type="password" id="password" name="password" class="form-control form-control-lg" />
-                  <label class="form-label" for="password">Password</label>
+                  <input type="password" id="secret_key" name="secret_key" class="form-control form-control-lg" value="{{ secret_key }}" />
+                  <label class="form-label" for="secret_key">SECRET Key</label>
                 </div>
-
+<!--Design from Bryan lin: https://github.com/bryanlin16899 -->
                 <div class="d-flex justify-content-center">
-                  <button type="submit" class="btn btn-primary btn-block btn-lg gradient-custom-4">Log in</button>
+                  <button type="submit" class="btn btn-primary btn-block btn-lg gradient-custom-4">Submit</button>
                 </div>
-
               </form>
-
             </div>
           </div>
         </div>
@@ -35,5 +32,3 @@
   </div>
 </section>
 {% endblock %}
-
-<!--Design from Bryan lin: https://github.com/bryanlin16899 -->

@@ -105,11 +105,13 @@ h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
   margin-bottom: 0.5rem;
   font-weight: 500;
   line-height: 1.2;
+  text-align: center;
 }
 
 h1, .h1 {
   font-size: calc(1.375rem + 1.5vw);
 }
+
 @media (min-width: 1200px) {
   h1, .h1 {
     font-size: 2.5rem;
@@ -154,6 +156,7 @@ h6, .h6 {
 p {
   margin-top: 0;
   margin-bottom: 1rem;
+  text-align: center;
 }
 
 abbr[title],
@@ -4214,7 +4217,7 @@ textarea.form-control-lg {
     overflow-y: visible;
   }
 }
-@media (min-width: 992px) {
+@media (min-width: 730px) {
   .navbar-expand-lg {
     flex-wrap: nowrap;
     justify-content: flex-start;
@@ -11287,15 +11290,12 @@ textarea.form-control-lg {
   width: 15rem;
 }
 
-#page-content-wrapper {
-  min-width: 100vw;
-}
 
 body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
   margin-left: 0;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 400px) {
   #sidebar-wrapper {
     margin-left: 0;
   }
