@@ -1,1 +1,3 @@
-web: gunicorn crypto_invest.wsgi –log-file -
+web: gunicorn crypto_invest.wsgi:application --log-file - --log-level debug
+python manage.py collectstatic --noinput
+manage.py migrate
