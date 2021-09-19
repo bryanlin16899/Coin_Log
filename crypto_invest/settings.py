@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'crypto_invest.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'heroku_deploy',
+        'NAME': 'heroku_4aed0438aa3f7be',
         'USER': 'be77333e9a232d',
         'PASSWORD': '387eae3d',
         'HOST': 'us-cdbr-east-04.cleardb.com', #本地的話就是localhost
