@@ -27,36 +27,65 @@
     </section>
     <section class="records">
         <div class="container">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Date</th>
-                <th scope="col"></th>
-                <th scope="col">Coin</th>
-                <th scope="col">Price</th>
-                <th scope="col">Amount</th>
-                <th scope="col">Cost</th>
-              </tr>
-            </thead>
-            <tbody>
-            {% for item in this_coin.new_trade%}
-              <tr>
-                <th scope="row">{{ forloop.counter }}</th>
-                <td class="col-md-2">{{ item.time }}</td>
-                {% if item.isBuyer %}
-                  <td><button type="button" class="btn btn-success btn-sm disabled">Buy</button></td>
-                {% else %}
-                  <td><button type="button" class="btn btn-danger btn-sm disabled">Sell</button></td>
-                {% endif %}
-                <td>{{ item.symbol }}</td>
-                <td>{{ item.price|floatformat:3 }}</td>
-                <td>{{ item.qty }}</td>
-                <td>{{ item.quoteQty|floatformat:3 }}</td>
-              </tr>
-            {% endfor %}
-            </tbody>
-          </table>
+          <div class="row">
+              <div class="col col-lg-10">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Date</th>
+                        <th scope="col"></th>
+                        <th scope="col">Coin</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Cost</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in this_coin.new_trade%}
+                      <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td class="col-md-2">{{ item.time }}</td>
+                        {% if item.isBuyer %}
+                          <td><button type="button" class="btn btn-success btn-sm disabled">Buy</button></td>
+                        {% else %}
+                          <td><button type="button" class="btn btn-danger btn-sm disabled">Sell</button></td>
+                        {% endif %}
+                        <td>{{ item.symbol }}</td>
+                        <td>{{ item.price|floatformat:3 }}</td>
+                        <td>{{ item.qty }}</td>
+                        <td>{{ item.quoteQty|floatformat:3 }}</td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+              </div>
+              <div class="col col-lg-2">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th scope="col">Asset</th>
+                        <th scope="col">Value</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in user_asset %}
+                      <tr>
+                        <td style="font-size: 15px">
+                            {% for coin in RQST_FROM_GECKO %}
+                                {% if coin.symbol == item.asset|lower %}
+                                <img src="{{ coin.image }}" width="23">
+                                {% endif %}
+                            {% endfor %}
+                            {{ item.asset }}
+                        </td>
+                        <td class="col-md-2">{{ item.free|floatformat:5 }}</td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+              </div>
+          </div>
         </div>
       </section>
 {% endblock %}

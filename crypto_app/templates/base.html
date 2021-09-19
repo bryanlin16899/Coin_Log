@@ -45,7 +45,7 @@
                     <div class="container coin-info-container">
                         <table class="table table-striped">
                             <tbody>
-                                {% for coin in RQST_FROM_GECKO %}
+                                {% for coin in RQST_FROM_GECKO|slice:"0:30" %}
                                 <tr>
                                     <td style="font-size: 13px"> <img src="{{coin.image}}" width="23"> {{ coin.symbol|upper }}</td>
                                     <td style="font-size: 12px">{{ coin.current_price }}</td>

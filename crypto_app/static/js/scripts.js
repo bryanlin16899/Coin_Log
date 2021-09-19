@@ -36,17 +36,17 @@ window.addEventListener('DOMContentLoaded', event => {
 
     if (Number(coinProfit.textContent) > 0){
         coinProfit.style.color = 'green';
-        coinProfit.textContent = `▲${coinProfit.textContent}`
+        coinProfit.textContent = `▲${coinProfit.textContent} USD`
     } else if (Number(coinProfit.textContent) < 0) {
         coinProfit.style.color = 'red';
-        coinProfit.textContent = `▼${coinProfit.textContent}`
+        coinProfit.textContent = `▼${coinProfit.textContent} USD`
     } else {
         coinProfit.textContent = `0`
     }
 });
 
 window.setTimeout(function () {
-    if (window.location.pathname === '/'){
+    if (window.location.pathname === '/' || window.location.pathname === '/dashboard'){
         window.location.reload();
     }
 }, 30000);

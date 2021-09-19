@@ -1,0 +1,1 @@
+web: gunicorn crypto_invest.wsgi –log-file -
