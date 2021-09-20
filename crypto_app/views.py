@@ -18,18 +18,7 @@ class GetUserInfo:
     def __init__(self):
         self.api_key = None
         self.secret_key = None
-
-    def get_trades_info(self, symbol='BTCUSDT'):
-        client = Client(self.api_key, self.secret_key)
-        this_coin = {
-            'new_trade': {},
-            'profit': 0,
-            'totle_costs': 0,
-            'totle_amount': 0,
-            'realized_profit': 0,
-            'unrealized_profit': 0,
-        }
-        ALL_TICKERS = ['ETHBTC', 'LTCBTC', 'BNBBTC', 'NEOBTC', 'QTUMETH', 'EOSETH', 'SNTETH', 'BNTETH', 'BCCBTC',
+        self.ALL_TICKERS = ['ETHBTC', 'LTCBTC', 'BNBBTC', 'NEOBTC', 'QTUMETH', 'EOSETH', 'SNTETH', 'BNTETH', 'BCCBTC',
                        'GASBTC',
                        'BNBETH', 'BTCUSDT', 'ETHUSDT', 'HSRBTC', 'OAXETH', 'DNTETH', 'MCOETH', 'ICNETH', 'MCOBTC',
                        'WTCBTC',
@@ -297,7 +286,18 @@ class GetUserInfo:
                        'ELFBUSD', 'POLYUSDT', 'IDEXUSDT', 'VIDTUSDT', 'SOLBIDR', 'AXSBIDR', 'BTCUSDP', 'ETHUSDP',
                        'BNBUSDP',
                        'USDPBUSD', 'USDPUSDT', 'GALAUSDT', 'GALABUSD', 'GALABNB', 'GALABTC']
-        if symbol in ALL_TICKERS:
+
+    def get_trades_info(self, symbol='BTCUSDT'):
+        client = Client(self.api_key, self.secret_key)
+        this_coin = {
+            'new_trade': {},
+            'profit': 0,
+            'totle_costs': 0,
+            'totle_amount': 0,
+            'realized_profit': 0,
+            'unrealized_profit': 0,
+        }
+        if symbol in self.ALL_TICKERS:
             recent_price = float(client.get_recent_trades(symbol=symbol)[0]['price'])
             this_coin['new_trade'] = client.get_my_trades(symbol=symbol)
             # Calc totole_costs and totle_amount
@@ -387,7 +387,7 @@ def dashboard(request):
                           })
         elif request.method == 'POST':
             new_symbol = request.POST.get('inputTicker')
-            if user.get_trades_info(symbol=new_symbol):
+            if new_symbol in user.ALL_TICKERS:
                 return render(request, 'dashboard.html',
                               {
                                'RQST_FROM_GECKO': RQST_FROM_GECKO,
