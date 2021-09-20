@@ -16,7 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-from django.urls import path
+from django.views.static import serve
+from django.urls import path, re_path
 from crypto_app import views
 
 urlpatterns = [
@@ -28,5 +29,8 @@ urlpatterns = [
     path('login', views.loginuser, name='loginuser'),
     path('logout', views.logoutuser, name='logoutuser'),
     # Change user api key
-    path('change_api_key', views.change_api_key, name='change_api_key')
+    path('change_api_key', views.change_api_key, name='change_api_key'),
+
+    re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
+    re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
