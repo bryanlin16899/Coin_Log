@@ -1,6 +1,4 @@
 import requests
-import time
-import win32api
 from .models import Website_users
 from datetime import datetime
 from binance import Client
@@ -291,10 +289,6 @@ class GetUserInfo:
 
     def get_trades_info(self, symbol='BTCUSDT'):
         client = Client(self.api_key, self.secret_key)
-        # update timestamp to match binance api timestamp
-        server_time = client.get_server_time()
-        gmtime = time.gmtime(int((server_time["serverTime"]) / 1000))
-        win32api.SetSystemTime(gmtime[0], gmtime[1], 0, gmtime[2], gmtime[3], gmtime[4], gmtime[5], 0)
         this_coin = {
             'new_trade': {},
             'profit': 0,
