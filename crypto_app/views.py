@@ -1,4 +1,6 @@
 import requests
+import time
+import win32api
 from .models import Website_users
 from datetime import datetime
 from binance import Client
@@ -289,6 +291,10 @@ class GetUserInfo:
 
     def get_trades_info(self, symbol='BTCUSDT'):
         client = Client(self.api_key, self.secret_key)
+        # update timestamp to match binance api timestamp
+        server_time = client.get_server_time()
+        gmtime = time.gmtime(int((server_time["serverTime"]) / 1000))
+        win32api.SetSystemTime(gmtime[0], gmtime[1], 0, gmtime[2], gmtime[3], gmtime[4], gmtime[5], 0)
         this_coin = {
             'new_trade': {},
             'profit': 0,
@@ -328,6 +334,14 @@ class GetUserInfo:
                 user_own_asset.append(item)
         return user_own_asset
 
+    def get_user_status(self):
+        client = Client(self.api_key, self.secret_key)
+        try:
+            client.get_account_status()
+            return True
+        except BinanceAPIException:
+            return False
+
 
 def home(request):
     return render(request, 'index.html', {'RQST_FROM_GECKO': RQST_FROM_GECKO})
@@ -339,13 +353,19 @@ def signupuser(request):
     else:
         if request.POST['password1'] == request.POST['password2']:
             try:
-                user = User.objects.create_user(request.POST['username'], password=request.POST['password1'])
-                user.save()
-                user_id = User.objects.get(username=request.POST['username']).id
-                api_info = Website_users(user_id=user_id, api_key=request.POST['api_key'], secret_key=request.POST['secret_key'])
-                api_info.save()
-                login(request, user)
-                return redirect('dashboard')
+                user = GetUserInfo()
+                user.api_key = request.POST['api_key']
+                user.secret_key = request.POST['secret_key']
+                if user.get_user_status():
+                    user = User.objects.create_user(request.POST['username'], password=request.POST['password1'])
+                    user.save()
+                    user_id = User.objects.get(username=request.POST['username']).id
+                    api_info = Website_users(user_id=user_id, api_key=request.POST['api_key'], secret_key=request.POST['secret_key'])
+                    api_info.save()
+                    login(request, user)
+                    return redirect('dashboard')
+                else:
+                    return render(request, 'signup.html', {'RQST_FROM_GECKO': RQST_FROM_GECKO, 'error': 'Your API key or Secret key is invalid.'})
             except IntegrityError:
                 return render(request, 'signup.html', {'RQST_FROM_GECKO': RQST_FROM_GECKO, 'error': 'That username has already been taken \n try another one.'})
         else:
@@ -413,7 +433,6 @@ def dashboard(request):
                       {
                           'RQST_FROM_GECKO': RQST_FROM_GECKO,
                           'error': 'Your API KEY or SECRET KEY did not correct.',
-                          'user_asset': user.get_asset()
                       })
 
 
