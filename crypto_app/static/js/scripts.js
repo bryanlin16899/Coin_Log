@@ -12,22 +12,24 @@ const form = document.querySelector('.form')
 const priceChange24h = document.querySelectorAll('.day_change')
 const coinProfit = document.querySelector('.coin_profit')
 
+const coin_market = document.querySelectorAll('.coin_market')
+const curElement = Array.from(coin_market)
+
+window.setTimeout(function () {
+    if (window.location.pathname === '/' || window.location.pathname === '/dashboard'){
+        window.location.reload();
+    }
+}, 30000);
+
+const timeout = function (s) {
+  return new Promise(function (_, reject) {
+    setTimeout(function () {
+      reject(new Error(`Request took too long! Timeout after ${s} second`));
+    }, s * 1000);
+  });
+};
+
 window.addEventListener('DOMContentLoaded', event => {
-
-//    // Toggle the side navigation
-//    const sidebarToggle = document.body.querySelector('#sidebarToggle');
-//    if (sidebarToggle) {
-////         Uncomment Below to persist sidebar toggle between refreshes
-//         if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
-//             document.body.classList.toggle('sb-sidenav-toggled');
-//         }
-//        sidebarToggle.addEventListener('click', event => {
-//            event.preventDefault();
-//            document.body.classList.toggle('sb-sidenav-toggled');
-//            localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
-//        });
-//    }
-
     if (searchTrade) {
         if (localStorage.getItem('form_hidden') === 'false') {
             form.classList.remove('hidden');
@@ -43,18 +45,29 @@ window.addEventListener('DOMContentLoaded', event => {
     } else {
         coinProfit.textContent = `0`
     }
-});
 
-window.setTimeout(function () {
-    if (window.location.pathname === '/' || window.location.pathname === '/dashboard'){
-        window.location.reload();
-    }
-}, 30000);
+    console.log(curElement);
+});
 
 searchTrade.addEventListener('click', function(){
     form.classList.toggle('hidden');
     localStorage.setItem('form_hidden', true);
 })
+
+const getData = async function (url) {
+    try {
+        const fetchData = fetch(url)
+        const res = await Promise.race([fetchData, timeout(10)])
+
+        if(!res.ok) throw new Error(`something wrong.`)
+        console.log(res.json())
+
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+getData('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false')
 
 priceChange24h.forEach( num => {
 if (Number(num.textContent) > 0){

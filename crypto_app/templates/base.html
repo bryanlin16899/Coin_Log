@@ -48,7 +48,7 @@
                                 {% for coin in RQST_FROM_GECKO|slice:"0:30" %}
                                 <tr>
                                     <td style="font-size: 13px"> <img src="{{coin.image}}" width="23"> {{ coin.symbol|upper }}</td>
-                                    <td style="font-size: 12px">{{ coin.current_price }}</td>
+                                    <td style="font-size: 12px" class="coin_market">{{ coin.current_price }}</td>
                                     <td style="font-size: 1px" class="day_change">{{coin.price_change_percentage_24h|floatformat:2}}</td>
                                 </tr>
                                 {% endfor %}
