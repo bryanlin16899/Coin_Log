@@ -50,7 +50,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'coinlog.urls'
+# ROOT_URLCONF = 'coinlog.urls'
 
 TEMPLATES = [
     {
