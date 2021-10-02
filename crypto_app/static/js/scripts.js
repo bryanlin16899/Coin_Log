@@ -6,28 +6,25 @@
 // 
 // Scripts
 //
+import coinMarketView from './coinMarketView.js'
+import { loadData, state } from './model.js'
+
 const searchTrade = document.querySelector('.search_trade__btn')
-//const submitRecord = document.querySelector('.')
 const form = document.querySelector('.form')
-const priceChange24h = document.querySelectorAll('.day_change')
 const coinProfit = document.querySelector('.coin_profit')
 
-const coin_market = document.querySelectorAll('.coin_market')
-const curElement = Array.from(coin_market)
-
-window.setTimeout(function () {
+// Fetch Market Data every 30 sec, if data is different
+// page content will change without refresh.
+window.setInterval(async function () {
     if (window.location.pathname === '/' || window.location.pathname === '/dashboard'){
-        window.location.reload();
+        const data = await loadData()
+        if (data === 'diff') {
+            console.log('✨✨✨')
+            coinMarketView.renderMarkup(state.result.slice(0,30))
+            coinMarketView.priceChangeColor()
+        }
     }
 }, 30000);
-
-const timeout = function (s) {
-  return new Promise(function (_, reject) {
-    setTimeout(function () {
-      reject(new Error(`Request took too long! Timeout after ${s} second`));
-    }, s * 1000);
-  });
-};
 
 window.addEventListener('DOMContentLoaded', event => {
     if (searchTrade) {
@@ -45,8 +42,6 @@ window.addEventListener('DOMContentLoaded', event => {
     } else {
         coinProfit.textContent = `0`
     }
-
-    console.log(curElement);
 });
 
 searchTrade.addEventListener('click', function(){
@@ -54,28 +49,9 @@ searchTrade.addEventListener('click', function(){
     localStorage.setItem('form_hidden', true);
 })
 
-const getData = async function (url) {
-    try {
-        const fetchData = fetch(url)
-        const res = await Promise.race([fetchData, timeout(10)])
-
-        if(!res.ok) throw new Error(`something wrong.`)
-        console.log(res.json())
-
-    } catch (err) {
-        console.log(err)
-    }
+const init = async function() {
+    await loadData()
+    coinMarketView.renderMarkup(state.result.slice(0,30))
+    coinMarketView.priceChangeColor()
 }
-
-getData('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false')
-
-priceChange24h.forEach( num => {
-if (Number(num.textContent) > 0){
-    num.style.color = 'green';
-    num.textContent = `▲${num.textContent}`
-} else {
-    num.style.color = 'red';
-    num.textContent = `▼${num.textContent}`
-}
-})
-
+init()

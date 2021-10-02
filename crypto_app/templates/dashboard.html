@@ -72,11 +72,7 @@
                     {% for item in user_asset %}
                       <tr>
                         <td style="font-size: 15px">
-                            {% for coin in RQST_FROM_GECKO %}
-                                {% if coin.symbol == item.asset|lower %}
-                                <img src="{{ coin.image }}" width="23">
-                                {% endif %}
-                            {% endfor %}
+                            <img class="coin-icon" alt="{{ item.asset|lower }}" src="{{ coin.image }}" width="23">
                             {{ item.asset }}
                         </td>
                         <td class="col-md-2">{{ item.free|floatformat:5 }}</td>

@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 
 from crypto_app import config
 
-RQST_FROM_GECKO = requests.get(url=config.COIN_GECKO_URL).json()
+# RQST_FROM_GECKO = requests.get(url=config.COIN_GECKO_URL).json()
 
 class GetUserInfo:
     def __init__(self):
@@ -72,12 +72,12 @@ class GetUserInfo:
 
 
 def home(request):
-    return render(request, 'index.html', {'RQST_FROM_GECKO': RQST_FROM_GECKO})
+    return render(request, 'index.html')
 
 
 def signupuser(request):
     if request.method == 'GET':
-        return render(request, 'signup.html', {'RQST_FROM_GECKO': RQST_FROM_GECKO})
+        return render(request, 'signup.html')
     else:
         if request.POST['password1'] == request.POST['password2']:
             try:
@@ -93,21 +93,21 @@ def signupuser(request):
                     login(request, user)
                     return redirect('dashboard')
                 else:
-                    return render(request, 'signup.html', {'RQST_FROM_GECKO': RQST_FROM_GECKO, 'error': 'Your API key or Secret key is invalid.'})
+                    return render(request, 'signup.html', {'error': 'Your API key or Secret key is invalid.'})
             except IntegrityError:
-                return render(request, 'signup.html', {'RQST_FROM_GECKO': RQST_FROM_GECKO, 'error': 'That username has already been taken \n try another one.'})
+                return render(request, 'signup.html', {'error': 'That username has already been taken \n try another one.'})
         else:
-            return render(request, 'signup.html', {'RQST_FROM_GECKO': RQST_FROM_GECKO, 'error': 'Password did not match.'})
+            return render(request, 'signup.html', {'error': 'Password did not match.'})
     # Design from Bryan lin: https://github.com/bryanlin16899
 
 
 def loginuser(request):
     if request.method == 'GET':
-        return render(request, 'login.html', {'RQST_FROM_GECKO': RQST_FROM_GECKO})
+        return render(request, 'login.html')
     else:
         user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
         if user is None:
-            return render(request, 'login.html', {'RQST_FROM_GECKO': RQST_FROM_GECKO, 'error': 'Username and password did not match.'})
+            return render(request, 'login.html', {'error': 'Username and password did not match.'})
         else:
             login(request, user)
             return redirect('dashboard')
@@ -129,8 +129,7 @@ def dashboard(request):
         if request.method == 'GET':
             return render(request, 'dashboard.html',
                           {
-                           'RQST_FROM_GECKO': RQST_FROM_GECKO,
-                           'this_coin': user.get_trades_info(),
+                                                      'this_coin': user.get_trades_info(),
                            'user_asset': user.get_asset()
                           })
         elif request.method == 'POST':
@@ -138,29 +137,25 @@ def dashboard(request):
             if new_symbol in user.ALL_TICKERS:
                 return render(request, 'dashboard.html',
                               {
-                               'RQST_FROM_GECKO': RQST_FROM_GECKO,
-                               'this_coin': user.get_trades_info(symbol=new_symbol),
+                                                              'this_coin': user.get_trades_info(symbol=new_symbol),
                                'user_asset': user.get_asset()
                               })
             else:
                 return render(request, 'dashboard.html',
                               {
-                               'RQST_FROM_GECKO': RQST_FROM_GECKO,
-                               'error': 'Invalid Ticker',
+                                                              'error': 'Invalid Ticker',
                                'user_asset': user.get_asset()
                               })
         else:
             return render(request, 'dashboard.html',
                           {
-                           'RQST_FROM_GECKO': RQST_FROM_GECKO,
-                           'this_coin': user.get_trades_info(),
+                                                      'this_coin': user.get_trades_info(),
                            'user_asset': user.get_asset()
                           })
     except BinanceAPIException:
         return render(request, 'dashboard.html',
                       {
-                          'RQST_FROM_GECKO': RQST_FROM_GECKO,
-                          'error': 'Your API KEY or SECRET KEY did not correct.',
+                                                    'error': 'Your API KEY or SECRET KEY did not correct.',
                       })
 
 
@@ -170,7 +165,7 @@ def change_api_key(request):
     api_key = user_key_info.api_key
     secret_key = user_key_info.secret_key
     if request.method == 'GET':
-        return render(request, 'change_user_api_key.html', {'RQST_FROM_GECKO': RQST_FROM_GECKO, 'api_key': api_key, 'secret_key': secret_key})
+        return render(request, 'change_user_api_key.html', {'api_key': api_key, 'secret_key': secret_key})
     else:
         user_key_info.api_key = request.POST['api_key']
         user_key_info.secret_key = request.POST['secret_key']
