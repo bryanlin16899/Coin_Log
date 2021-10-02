@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'coinlog.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'crypto_invest.settings')
 
 application = get_wsgi_application()
