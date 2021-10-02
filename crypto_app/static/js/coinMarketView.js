@@ -1,5 +1,5 @@
 class CoinMarketView {
-    _allData;
+    _allData
     _data;
     _parentElement = document.querySelector('.coin-market');
 

@@ -129,7 +129,7 @@ def dashboard(request):
         if request.method == 'GET':
             return render(request, 'dashboard.html',
                           {
-                                                      'this_coin': user.get_trades_info(),
+                           'this_coin': user.get_trades_info(),
                            'user_asset': user.get_asset()
                           })
         elif request.method == 'POST':
@@ -137,25 +137,25 @@ def dashboard(request):
             if new_symbol in user.ALL_TICKERS:
                 return render(request, 'dashboard.html',
                               {
-                                                              'this_coin': user.get_trades_info(symbol=new_symbol),
+                               'this_coin': user.get_trades_info(symbol=new_symbol),
                                'user_asset': user.get_asset()
                               })
             else:
                 return render(request, 'dashboard.html',
                               {
-                                                              'error': 'Invalid Ticker',
+                               'error': 'Invalid Ticker',
                                'user_asset': user.get_asset()
                               })
         else:
             return render(request, 'dashboard.html',
                           {
-                                                      'this_coin': user.get_trades_info(),
+                           'this_coin': user.get_trades_info(),
                            'user_asset': user.get_asset()
                           })
     except BinanceAPIException:
         return render(request, 'dashboard.html',
                       {
-                                                    'error': 'Your API KEY or SECRET KEY did not correct.',
+                        'error': 'Your API KEY or SECRET KEY did not correct.',
                       })
 
 

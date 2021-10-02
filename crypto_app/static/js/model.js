@@ -3,7 +3,9 @@ let lastBitcoin;
 
 export const state = {
     result: [],
+    allCoinImage: {},
 }
+
 
 const timeout = function (s) {
     return new Promise(function (_, reject) {
@@ -58,4 +60,10 @@ export const loadData = async function() {
     } catch(err) { 
         console.log(err);
     }
+}
+
+export const loadCoinImage = async function() {
+    state.result.map(res => {
+        return state.allCoinImage[res.symbol] = res.image
+    })
 }

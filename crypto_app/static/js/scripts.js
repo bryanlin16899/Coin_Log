@@ -7,11 +7,11 @@
 // Scripts
 //
 import coinMarketView from './coinMarketView.js'
-import { loadData, state } from './model.js'
+import userAssetView from './userAssetView.js'
+import { loadData, loadCoinImage, state } from './model.js'
 
 const searchTrade = document.querySelector('.search_trade__btn')
 const form = document.querySelector('.form')
-const coinProfit = document.querySelector('.coin_profit')
 
 // Fetch Market Data every 30 sec, if data is different
 // page content will change without refresh.
@@ -32,16 +32,6 @@ window.addEventListener('DOMContentLoaded', event => {
             form.classList.remove('hidden');
         }
     }
-
-    if (Number(coinProfit.textContent) > 0){
-        coinProfit.style.color = 'green';
-        coinProfit.textContent = `▲${coinProfit.textContent} USD`
-    } else if (Number(coinProfit.textContent) < 0) {
-        coinProfit.style.color = 'red';
-        coinProfit.textContent = `▼${coinProfit.textContent} USD`
-    } else {
-        coinProfit.textContent = `0`
-    }
 });
 
 searchTrade.addEventListener('click', function(){
@@ -49,9 +39,15 @@ searchTrade.addEventListener('click', function(){
     localStorage.setItem('form_hidden', true);
 })
 
+const controlUserAsset = function() {
+    userAssetView.render(state.allCoinImage)
+}
+
 const init = async function() {
     await loadData()
+    loadCoinImage()
     coinMarketView.renderMarkup(state.result.slice(0,30))
     coinMarketView.priceChangeColor()
+    userAssetView.addHandlerUserAsset(controlUserAsset)
 }
 init()
