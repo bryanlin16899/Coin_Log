@@ -77,9 +77,9 @@ WSGI_APPLICATION = 'crypto_invest.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'heroku_4aed0438aa3f7be',
-        'USER': 'be77333e9a232d',
-        'PASSWORD': '387eae3d',
+        'NAME': 'heroku_4c3b26e621da987',
+        'USER': 'b462bc44be8446',
+        'PASSWORD': 'a4ae61a9',
         'HOST': 'us-cdbr-east-04.cleardb.com', #本地的話就是localhost
         'OPTIONS': {
             'charset': 'utf8mb4' #因為網站會需要輸入中文，所以使用utf8
